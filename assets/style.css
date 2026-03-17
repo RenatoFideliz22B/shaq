@@ -22,16 +22,16 @@ h1{
         0 0 40px #ff0000;
 }
 
-/* Ajuste do stroke no mobile */
+/* Ajuste para mobile mantendo efeito igual ao desktop */
 @media (max-width: 768px){
     h1{
-        font-size: 28px;
-        -webkit-text-stroke: 0.8px #ff0000; /* stroke mais fino */
+        font-size: 35px;                   /* mesmo tamanho do PC */
+        -webkit-text-stroke: 2px #ff0000;  /* mesma espessura */
         text-shadow:
-            0 0 2px #ff0000,
-            0 0 4px #ff0000,
-            0 0 8px #ff0000,
-            0 0 12px #ff0000; /* sombras mais leves */
+            0 0 3px #ff0000,
+            0 0 6px #ff0000,
+            0 0 12px #ff0000,
+            0 0 25px #ff0000; /* menos blur no mobile para não esbranquiçar */
     }
 }
 
@@ -87,7 +87,6 @@ nav a:hover{
     padding:100px 20px;
 }
 
-/* HERO H2 e P */
 .hero h2{
     font-size:40px;
     margin-bottom:15px;
