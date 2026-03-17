@@ -1,0 +1,237 @@
+const input = document.getElementById("pergunta");
+const chat = document.getElementById("chat-box");
+
+let memoria = [];
+let sintomasUsuario = [];
+
+/* criar mensagem */
+
+function criarMensagem(texto, tipo){
+
+    let msg = document.createElement("div");
+    msg.className = "mensagem " + tipo;
+
+    chat.appendChild(msg);
+
+    digitar(texto, msg);
+
+    chat.scrollTop = chat.scrollHeight;
+
+    return msg;
+}
+
+/* efeito digitando */
+
+function digitar(texto, elemento){
+
+    elemento.textContent = "";
+
+    let i = 0;
+
+    let intervalo = setInterval(()=>{
+
+        if(i < texto.length){
+
+            elemento.textContent += texto[i];
+            i++;
+
+        }else{
+
+            clearInterval(intervalo);
+
+        }
+
+        chat.scrollTop = chat.scrollHeight;
+
+    },15);
+
+}
+
+/* banco de sintomas */
+
+const sintomasBanco = {
+
+    febre:["febre","febril","temperatura","quente"],
+    tosse:["tosse","tossindo"],
+    dorCabeca:["dor de cabeça","enxaqueca","cabeça doendo"],
+    cansaco:["cansaço","fadiga","cansado"],
+    garganta:["garganta","dor na garganta"],
+    faltaAr:["falta de ar","dificuldade para respirar"],
+    nausea:["náusea","enjoo","vomito","vômito"]
+
+};
+
+/* possíveis diagnósticos */
+
+const diagnosticos = [
+
+{
+nome:"Resfriado",
+sintomas:["tosse","garganta","cansaco"],
+recomendacao:"Pode ser um resfriado comum. Descansar, beber bastante água e manter boa alimentação pode ajudar."
+},
+
+{
+nome:"Gripe",
+sintomas:["febre","tosse","cansaco","dorCabeca"],
+recomendacao:"Pode indicar gripe. É importante descansar, beber líquidos e monitorar a febre."
+},
+
+{
+nome:"Infecção respiratória",
+sintomas:["febre","tosse","faltaAr"],
+recomendacao:"Pode indicar infecção respiratória. É recomendado procurar avaliação médica."
+},
+
+{
+nome:"Problema gastrointestinal",
+sintomas:["nausea","cansaco"],
+recomendacao:"Pode estar relacionado a problema gastrointestinal ou intoxicação alimentar."
+}
+
+];
+
+/* detectar sintomas */
+
+function detectarSintomas(texto){
+
+    texto = texto.toLowerCase();
+
+    for(let chave in sintomasBanco){
+
+        for(let palavra of sintomasBanco[chave]){
+
+            if(texto.includes(palavra)){
+
+                if(!sintomasUsuario.includes(chave)){
+                    sintomasUsuario.push(chave);
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+/* analisar sintomas */
+
+function analisarSaude(){
+
+    let melhor = null;
+    let maiorScore = 0;
+
+    for(let d of diagnosticos){
+
+        let score = 0;
+
+        for(let s of d.sintomas){
+
+            if(sintomasUsuario.includes(s)){
+                score++;
+            }
+
+        }
+
+        if(score > maiorScore){
+
+            maiorScore = score;
+            melhor = d;
+
+        }
+
+    }
+
+    return melhor;
+
+}
+
+/* nível de urgência */
+
+function nivelUrgencia(){
+
+    if(sintomasUsuario.includes("faltaAr")){
+        return "🚨 Sintoma potencialmente grave. Procure atendimento médico imediato.";
+    }
+
+    if(sintomasUsuario.includes("febre") && sintomasUsuario.includes("faltaAr")){
+        return "🚨 Possível infecção séria. Procure um médico.";
+    }
+
+    return "⚠️ Monitorar sintomas e procurar médico se piorar.";
+}
+
+/* gerar resposta */
+
+function gerarResposta(pergunta){
+
+    memoria.push(pergunta);
+
+    detectarSintomas(pergunta);
+
+    if(sintomasUsuario.length === 0){
+
+        return "Não consegui identificar sintomas específicos.\n\nPode descrever melhor o que está sentindo?";
+    }
+
+    let analise = analisarSaude();
+
+    let resposta = "🔎 Sintomas detectados:\n";
+    resposta += sintomasUsuario.join(", ");
+
+    if(analise){
+
+        resposta += "\n\n🧬 Possível condição:\n";
+        resposta += analise.nome;
+
+        resposta += "\n\n🩺 Recomendação:\n";
+        resposta += analise.recomendacao;
+
+    }
+
+    resposta += "\n\n" + nivelUrgencia();
+
+    resposta += "\n\n⚠️ Esta IA fornece apenas informações educativas e não substitui um profissional de saúde.";
+
+    /* corrigir pontuação colada */
+
+    resposta = resposta
+    .replace(/\.(?=\S)/g, ". ")
+    .replace(/,(?=\S)/g, ", ");
+
+    return resposta;
+
+}
+
+/* responder */
+
+function responder(){
+
+    let pergunta = input.value.trim();
+
+    if(pergunta === "") return;
+
+    criarMensagem(pergunta,"usuario");
+
+    input.value = "";
+
+    setTimeout(()=>{
+
+        let resposta = gerarResposta(pergunta);
+
+        criarMensagem(resposta,"ia");
+
+    },900);
+
+}
+
+/* enviar com ENTER */
+
+input.addEventListener("keypress",function(e){
+
+    if(e.key === "Enter"){
+        responder();
+    }
+
+});
