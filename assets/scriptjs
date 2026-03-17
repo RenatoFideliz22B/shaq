@@ -6,44 +6,43 @@ let sintomasUsuario = [];
 
 /* criar mensagem */
 
-function criarMensagem(texto, tipo){
+function criarMensagem(texto,tipo){
 
-    let msg = document.createElement("div");
-    msg.className = "mensagem " + tipo;
+let msg = document.createElement("div");
+msg.className = "mensagem " + tipo;
 
-    chat.appendChild(msg);
+chat.appendChild(msg);
 
-    digitar(texto, msg);
+digitar(texto,msg);
 
-    chat.scrollTop = chat.scrollHeight;
+chat.scrollTop = chat.scrollHeight;
 
-    return msg;
 }
 
 /* efeito digitando */
 
-function digitar(texto, elemento){
+function digitar(texto,elemento){
 
-    elemento.textContent = "";
+elemento.textContent="";
 
-    let i = 0;
+let i=0;
 
-    let intervalo = setInterval(()=>{
+let intervalo=setInterval(()=>{
 
-        if(i < texto.length){
+if(i < texto.length){
 
-            elemento.textContent += texto[i];
-            i++;
+elemento.textContent += texto[i];
+i++;
 
-        }else{
+}else{
 
-            clearInterval(intervalo);
+clearInterval(intervalo);
 
-        }
+}
 
-        chat.scrollTop = chat.scrollHeight;
+chat.scrollTop = chat.scrollHeight;
 
-    },15);
+},15);
 
 }
 
@@ -51,42 +50,125 @@ function digitar(texto, elemento){
 
 const sintomasBanco = {
 
-    febre:["febre","febril","temperatura","quente"],
-    tosse:["tosse","tossindo"],
-    dorCabeca:["dor de cabeça","enxaqueca","cabeça doendo"],
-    cansaco:["cansaço","fadiga","cansado"],
-    garganta:["garganta","dor na garganta"],
-    faltaAr:["falta de ar","dificuldade para respirar"],
-    nausea:["náusea","enjoo","vomito","vômito"]
+febre:["febre","febril","temperatura","quente"],
+tosse:["tosse","tossindo"],
+dorCabeca:["dor de cabeça","enxaqueca","cabeça doendo"],
+cansaco:["cansaço","fadiga","cansado"],
+garganta:["garganta","dor na garganta"],
+faltaAr:["falta de ar","dificuldade para respirar"],
+nausea:["náusea","enjoo","vomito","vômito"]
 
 };
 
-/* possíveis diagnósticos */
+/* nomes bonitos */
+
+const nomesSintomas = {
+
+febre:"febre",
+tosse:"tosse",
+dorCabeca:"dor de cabeça",
+cansaco:"cansaço",
+garganta:"dor na garganta",
+faltaAr:"falta de ar",
+nausea:"náusea"
+
+};
+
+/* banco de condições */
 
 const diagnosticos = [
 
 {
 nome:"Resfriado",
 sintomas:["tosse","garganta","cansaco"],
-recomendacao:"Pode ser um resfriado comum. Descansar, beber bastante água e manter boa alimentação pode ajudar."
+recomendacao:[
+"Pode ser um resfriado comum.",
+"Repouso e hidratação podem ajudar.",
+"Normalmente melhora em alguns dias."
+]
 },
 
 {
 nome:"Gripe",
 sintomas:["febre","tosse","cansaco","dorCabeca"],
-recomendacao:"Pode indicar gripe. É importante descansar, beber líquidos e monitorar a febre."
+recomendacao:[
+"Os sintomas podem indicar gripe.",
+"Descansar e beber líquidos pode ajudar.",
+"Monitorar febre é importante."
+]
 },
 
 {
 nome:"Infecção respiratória",
 sintomas:["febre","tosse","faltaAr"],
-recomendacao:"Pode indicar infecção respiratória. É recomendado procurar avaliação médica."
+recomendacao:[
+"Pode indicar infecção respiratória.",
+"É recomendado procurar avaliação médica.",
+"Um profissional de saúde deve avaliar."
+]
 },
 
 {
-nome:"Problema gastrointestinal",
+nome:"Bronquite",
+sintomas:["tosse","faltaAr","cansaco"],
+recomendacao:[
+"Pode estar relacionado à bronquite.",
+"Tosse persistente deve ser avaliada."
+]
+},
+
+{
+nome:"Sinusite",
+sintomas:["dorCabeca","garganta","cansaco"],
+recomendacao:[
+"Pode indicar sinusite.",
+"Dor na face ou cabeça pode ocorrer."
+]
+},
+
+{
+nome:"Enxaqueca",
+sintomas:["dorCabeca","nausea","cansaco"],
+recomendacao:[
+"Pode ser enxaqueca.",
+"Descansar em ambiente escuro pode ajudar."
+]
+},
+
+{
+nome:"Intoxicação alimentar",
 sintomas:["nausea","cansaco"],
-recomendacao:"Pode estar relacionado a problema gastrointestinal ou intoxicação alimentar."
+recomendacao:[
+"Pode estar relacionado a intoxicação alimentar.",
+"Manter hidratação é importante."
+]
+},
+
+{
+nome:"Gastrite",
+sintomas:["nausea","cansaco"],
+recomendacao:[
+"Pode indicar irritação no estômago.",
+"Evitar alimentos pesados pode ajudar."
+]
+},
+
+{
+nome:"Infecção viral",
+sintomas:["febre","tosse","cansaco"],
+recomendacao:[
+"Pode ser uma infecção viral.",
+"Monitorar sintomas é importante."
+]
+},
+
+{
+nome:"Alergia respiratória",
+sintomas:["tosse","garganta"],
+recomendacao:[
+"Pode ser reação alérgica.",
+"Evitar poeira ou alérgenos pode ajudar."
+]
 }
 
 ];
@@ -95,112 +177,142 @@ recomendacao:"Pode estar relacionado a problema gastrointestinal ou intoxicaçã
 
 function detectarSintomas(texto){
 
-    texto = texto.toLowerCase();
+texto = texto.toLowerCase();
 
-    for(let chave in sintomasBanco){
+for(let chave in sintomasBanco){
 
-        for(let palavra of sintomasBanco[chave]){
+for(let palavra of sintomasBanco[chave]){
 
-            if(texto.includes(palavra)){
+if(texto.includes(palavra)){
 
-                if(!sintomasUsuario.includes(chave)){
-                    sintomasUsuario.push(chave);
-                }
-
-            }
-
-        }
-
-    }
+if(!sintomasUsuario.includes(chave)){
+sintomasUsuario.push(chave);
+}
 
 }
 
-/* analisar sintomas */
+}
+
+}
+
+}
+
+/* analisar saúde */
 
 function analisarSaude(){
 
-    let melhor = null;
-    let maiorScore = 0;
+let resultados = [];
 
-    for(let d of diagnosticos){
+for(let d of diagnosticos){
 
-        let score = 0;
+let score = 0;
 
-        for(let s of d.sintomas){
+for(let s of d.sintomas){
 
-            if(sintomasUsuario.includes(s)){
-                score++;
-            }
-
-        }
-
-        if(score > maiorScore){
-
-            maiorScore = score;
-            melhor = d;
-
-        }
-
-    }
-
-    return melhor;
+if(sintomasUsuario.includes(s)){
+score++;
+}
 
 }
 
-/* nível de urgência */
+let compatibilidade = score / d.sintomas.length;
+
+if(compatibilidade >= 0.25){
+
+resultados.push({
+nome:d.nome,
+recomendacao:d.recomendacao,
+compatibilidade:compatibilidade
+});
+
+}
+
+}
+
+resultados.sort((a,b)=> b.compatibilidade - a.compatibilidade);
+
+return resultados.slice(0,4);
+
+}
+
+/* urgência */
 
 function nivelUrgencia(){
 
-    if(sintomasUsuario.includes("faltaAr")){
-        return "🚨 Sintoma potencialmente grave. Procure atendimento médico imediato.";
-    }
-
-    if(sintomasUsuario.includes("febre") && sintomasUsuario.includes("faltaAr")){
-        return "🚨 Possível infecção séria. Procure um médico.";
-    }
-
-    return "⚠️ Monitorar sintomas e procurar médico se piorar.";
+if(sintomasUsuario.includes("faltaAr")){
+return "🚨 Possível sintoma grave. Procure atendimento médico.";
 }
+
+if(sintomasUsuario.includes("febre")){
+return "⚠️ Febre detectada. Monitorar temperatura.";
+}
+
+return "🟢 Sintomas parecem leves no momento.";
+
+}
+
+/* perguntas da IA */
+
+const perguntasIA = [
+
+"Há quanto tempo você está com esses sintomas?",
+"Você sente cansaço também?",
+"Você mediu sua temperatura?",
+"Está com dor de cabeça também?",
+"Os sintomas estão piorando?"
+
+];
 
 /* gerar resposta */
 
 function gerarResposta(pergunta){
 
-    memoria.push(pergunta);
+memoria.push(pergunta);
 
-    detectarSintomas(pergunta);
+detectarSintomas(pergunta);
 
-    if(sintomasUsuario.length === 0){
+if(sintomasUsuario.length === 0){
 
-        return "Não consegui identificar sintomas específicos.\n\nPode descrever melhor o que está sentindo?";
-    }
+return "Não consegui identificar sintomas específicos.\n\nPode explicar melhor o que está sentindo?";
 
-    let analise = analisarSaude();
+}
 
-    let resposta = "🔎 Sintomas detectados:\n";
-    resposta += sintomasUsuario.join(", ");
+let resposta = "🔎 Sintomas identificados:\n";
 
-    if(analise){
+let lista = sintomasUsuario.map(s => nomesSintomas[s]);
 
-        resposta += "\n\n🧬 Possível condição:\n";
-        resposta += analise.nome;
+resposta += lista.join(", ");
 
-        resposta += "\n\n🩺 Recomendação:\n";
-        resposta += analise.recomendacao;
+let analises = analisarSaude();
 
-    }
+if(analises.length > 0){
 
-    resposta += "\n\n" + nivelUrgencia();
+resposta += "\n\n🧬 Possíveis condições:\n";
 
-    resposta += "\n\n⚠️ Esta IA fornece apenas informações educativas e não substitui um profissional de saúde.";
+analises.forEach(a=>{
 
-    /* corrigir pontuação colada */
+let porcentagem = Math.round(a.compatibilidade * 100);
 
-    resposta = resposta
-    .replace(/\.(?=\S)/g, ". ")
-    .replace(/,(?=\S)/g, ", ");
+let recomendacao = a.recomendacao[
+Math.floor(Math.random()*a.recomendacao.length)
+];
 
-    return resposta;
+resposta += "\n• " + a.nome + " (" + porcentagem + "% compatível)";
+resposta += "\n🩺 " + recomendacao + "\n";
+
+});
+
+}
+
+let perguntaExtra = perguntasIA[Math.floor(Math.random()*perguntasIA.length)];
+
+resposta += "\n💬 " + perguntaExtra;
+
+resposta += "\n\n" + nivelUrgencia();
+
+resposta += "\n\n⚠️ Esta IA fornece apenas informações educativas e não substitui um médico.";
+
+return resposta;
 
 }
 
@@ -208,21 +320,21 @@ function gerarResposta(pergunta){
 
 function responder(){
 
-    let pergunta = input.value.trim();
+let pergunta = input.value.trim();
 
-    if(pergunta === "") return;
+if(pergunta === "") return;
 
-    criarMensagem(pergunta,"usuario");
+criarMensagem(pergunta,"usuario");
 
-    input.value = "";
+input.value="";
 
-    setTimeout(()=>{
+setTimeout(()=>{
 
-        let resposta = gerarResposta(pergunta);
+let resposta = gerarResposta(pergunta);
 
-        criarMensagem(resposta,"ia");
+criarMensagem(resposta,"ia");
 
-    },900);
+},800);
 
 }
 
@@ -230,8 +342,8 @@ function responder(){
 
 input.addEventListener("keypress",function(e){
 
-    if(e.key === "Enter"){
-        responder();
-    }
+if(e.key === "Enter"){
+responder();
+}
 
 });
