@@ -10,8 +10,15 @@
     }
     
     h1{
-    color:#ffffff;
-    letter-spacing:10px;
+        color: #ffffff;                
+        letter-spacing: 10px;            
+        font-size: 35px;                  
+        -webkit-text-stroke: 2px #ff0000; 
+        text-shadow:                      
+            0 0 5px #ff0000,
+            0 0 10px #ff0000,
+            0 0 20px #ff0000,
+            0 0 40px #ff0000;
     }
     
     h2{
@@ -30,6 +37,16 @@
     object-fit:cover;
     filter:opacity(0.2);
     }
+
+    .overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: rgba(255, 0, 0, 0.079); /* MUDA A COR AQUI */
+        z-index: -2;
+    }
     
     /* HEADER */
     
@@ -42,14 +59,14 @@
     }
     
     nav a{
-    color:white;
+    color:rgb(255, 255, 255);
     text-decoration:none;
     margin-left:20px;
     transition:0.3s;
     }
     
     nav a:hover{
-    color:#575757;
+    color:#ff0000;
     }
     
     /* HERO */
@@ -69,20 +86,21 @@
     color:#cbd5f5;
     }
     
-    .hero button{
+    .hero button {
     padding:12px 25px;
     border:none;
     background:#ffffff;
-    color:#000000;
+    color: #ff0000;
     font-size:16px;
     border-radius:6px;
     cursor:pointer;
     transition:0.3s;
+    filter:drop-shadow(10px 10px 20px #ff0000);
     }
     
     .hero button:hover{
-    background:#575757;
     color:#ffffff;
+    background:#ff0000;
     }
     
     /* CARDS */
@@ -96,17 +114,19 @@
     
     .card{
     background:#ffffff;
+    color: #ff0000;
     padding:30px;
     border-radius:10px;
     width:250px;
     text-align:center;
     transition:0.3s;
+    filter:drop-shadow(10px 10px 20px #ff0000);
     }
     
     .card:hover{
     transform:translateY(-8px);
     color:#ffffff;
-    background:#575757;
+    background:#ff0000;
     }
     
     .card h3{
@@ -147,7 +167,7 @@
     flex-direction:column;
     gap:12px;
     
-    filter:drop-shadow(10px 10px 20px #ffffff);
+    filter:drop-shadow(10px 10px 20px #ff0000);
     }
     
     /* MENSAGENS */
@@ -165,7 +185,7 @@
     /* USUARIO */
     
     .usuario{
-    background:#000000;
+    background:#ff0000;
     color:white;
     align-self:flex-end;
     }
@@ -173,7 +193,7 @@
     /* IA */
     
     .ia{
-    background:#575757;
+    background:#960000;
     color:white;
     align-self:flex-start;
     }
@@ -181,7 +201,7 @@
     /* LINKS */
     
     a{
-    color:#000000;
+    color:#ff0000;
     text-decoration:none;
     }
     
@@ -207,7 +227,7 @@
     .chat-input button{
     padding:12px 20px;
     border:none;
-    background:#575757;
+    background:#ff0000;
     color:white;
     border-radius:6px;
     cursor:pointer;
@@ -216,7 +236,7 @@
     
     .chat-input button:hover{
     background:#ffffff;
-    color:#000000;
+    color:#ff0000;
     }
 
     @media (max-width:768px){
